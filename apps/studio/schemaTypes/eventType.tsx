@@ -121,6 +121,12 @@ export const eventType = defineType({
       type: 'url',
       group: 'editorial',
     }),
+    defineField({
+      name: 'firstPublished',
+      type: 'datetime',
+      readOnly: true,
+      group: 'details',
+    }),
   ],
   preview: {
     select: {
