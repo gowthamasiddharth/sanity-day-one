@@ -1,8 +1,10 @@
 import { defineQuery, PortableText } from "next-sanity";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 import { sanityFetch } from "@/sanity/live";
+import { urlFor } from "@/sanity/image";
 
 const EVENT_QUERY = defineQuery(`*[
     _type == "event" &&
@@ -31,6 +33,7 @@ export default async function EventPage({
     name,
     date,
     headline,
+    image,
     details,
     eventType,
     doorsOpen,
@@ -44,7 +47,23 @@ export default async function EventPage({
     new Date(date).getTime() - doorsOpen * 60000
   ).toLocaleTimeString();
 
-  const imageUrl = "https://placehold.co/550x310/png";
+  // Sanity image fields can be `{ _type: "image" }` with no `asset` until a file is chosen.
+  // urlFor() requires an asset reference; guard so we never pass an empty image object.
+  const heroImage =
+    headline?.photo?.asset != null
+      ? headline.photo
+      : image?.asset != null
+        ? image
+        : null;
+
+  const imageUrl = heroImage
+    ? urlFor(heroImage)
+        .height(310)
+        .width(550)
+        .quality(80)
+        .auto("format")
+        .url()
+    : "https://placehold.co/550x310/png";
 
   return (
     <main className="container mx-auto grid gap-12 p-12">
@@ -57,12 +76,12 @@ export default async function EventPage({
         </Link>
       </div>
       <div className="grid items-top gap-12 sm:grid-cols-2">
-        <img
+        <Image
           src={imageUrl}
           alt={name || "Event"}
           className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full"
-          height="310"
-          width="550"
+          height={310}
+          width={550}
         />
         <div className="flex flex-col justify-center space-y-4">
           <div className="space-y-4">
