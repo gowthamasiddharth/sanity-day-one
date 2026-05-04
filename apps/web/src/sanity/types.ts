@@ -45,6 +45,7 @@ export type Event = {
   name?: string;
   slug?: Slug;
   eventType?: "in-person" | "virtual";
+  format?: "in-person" | "virtual";
   date?: string;
   doorsOpen?: number;
   venue?: VenueReference;
@@ -75,6 +76,7 @@ export type Event = {
     _key: string;
   }>;
   tickets?: string;
+  firstPublished?: string;
 };
 
 export type SanityImageCrop = {
@@ -247,6 +249,7 @@ export type EVENT_QUERY_RESULT = {
   name?: string;
   slug?: Slug;
   eventType?: "in-person" | "virtual";
+  format?: "in-person" | "virtual";
   date: string;
   doorsOpen: number | 0;
   venue: {
@@ -301,6 +304,7 @@ export type EVENT_QUERY_RESULT = {
     _key: string;
   }>;
   tickets?: string;
+  firstPublished?: string;
 } | null;
 
 // Source: ../web/src/app/page.tsx
